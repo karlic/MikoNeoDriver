@@ -24,8 +24,8 @@ out by using the filter btatt in the "Apply a display filter" bar.
 
 You can search for a particular command such as "e2u" (piece on e2 was lifted) with Edit | Find Packet.
 
-## MikoNeoBoard.png
-This is a record of the moves made in capturing the file MikoNeoBoardBLETraffic.pcapng, in .png format.
+## MikoNeoBoard.pgn
+This is a record of the moves made in capturing the file MikoNeoBoardBLETraffic.pcapng, in .pgn format.
 The game was played by a human (White) against the Miko iPhone app. The game can be viewed by uploading
 it to a chess app or website such as https://chesstempo.com/pgn-viewer/
 
