@@ -1,0 +1,7 @@
+name: MikoNeoDriver
+description: A Miko Neo Driver written in pure Dart
+version: 0.0.1
+repository: https://github.com/mono424/MikoNeoDriver
+
+environment:
+  sdk: ">=2.11.0 <3.0.0"
