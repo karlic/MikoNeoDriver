@@ -15,7 +15,9 @@ functionality not provided by the Miko (and SquareOff Now) apps (such as opening
 ## What works?
 1. Scans for and finds the Neo board
 2. Connects to the Neo board and causes it to beep correctly
-3. White won, Black won, King in check, Draw and Test LEDs all appear to work
+3. New Game, Test LEDs, White won, Black won, King in check, Draw and Get Board all appear to work
+
+![Video of Sample app working](./MikoDriverTesting.mov "Video of app working")
 
 ## What doesn't work?
 1. There is currently no withcraft for moving the opponent's pieces
@@ -24,4 +26,5 @@ functionality not provided by the Miko (and SquareOff Now) apps (such as opening
 1. Purchase a bluetooth dongle such as https://www.amazon.co.uk/dp/B07TSJHTSY (£21)
 2. Follow these instructions https://wiki.makerdiary.com/nrf52840-mdk-usb-dongle/guides/ble-sniffer/
 
-
+## How to run this app
+https://docs.flutter.dev/get-started/install/macos/mobile-ios
