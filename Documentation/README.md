@@ -22,6 +22,8 @@ There were thousands(?) of empty packets that have been deleted from this captur
 The capture includes traffic from before the app connects to the board. I *think* these can be filtered
 out by using the filter btatt in the "Apply a display filter" bar.
 
+You can search for a particular command such as "e2u" (piece on e2 was lifted) with Edit | Find Packet.
+
 ## MikoNeoBoard.png
 This is a record of the moves made in capturing the file MikoNeoBoardBLETraffic.pcapng, in .png format.
 The game was played by a human (White) against the Miko iPhone app. The game can be viewed by uploading
