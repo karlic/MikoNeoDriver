@@ -17,7 +17,7 @@ functionality not provided by the Miko (and SquareOff Now) apps (such as opening
 2. Connects to the Neo board and causes it to beep correctly
 3. New Game, Test LEDs, White won, Black won, King in check, Draw and Get Board all appear to work
 
-![Video of Sample app working](./MikoDriverTesting.mov "Video of app working")
+![Video of Sample app working](Documentation/MikoDriverTesting.mov "Video of app working")
 
 ## What doesn't work?
 1. There is currently no withcraft for moving the opponent's pieces
