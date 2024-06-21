@@ -9,7 +9,8 @@ latest firmware from the Miko iPhone app.)
 https://github.com/mono424/squareoffdriver The inspiration for this driver. Pretty much everything here
 as been taken from his work.
 
-https://github.com/mrquincle/squareoff Some information on the protocol used, which partly matches the findings from the Wireshark capture.
+https://github.com/mrquincle/squareoff Some information on the protocol used by the Grand Kingdom board,
+which partly matches the findings from the Wireshark capture.
 
 
 ## MikoNeoBoardBLETraffic.pcapng
