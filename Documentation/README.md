@@ -30,7 +30,7 @@ The game was played by a human (White) against the Miko iPhone app. The game can
 it to a chess app or website such as https://chesstempo.com/pgn-viewer/
 
 ## MikoNeoBoard.txt
-The same as MikoNeoBoard.png, but just the moves in plain text for humans to read.
+The same as MikoNeoBoard.pgn, but just the moves in plain text for humans to read.
 
 ## MikoNeoBoardProtocol.md
 This is what is known so far about how the Miko app communicates with the Miko Neo board.

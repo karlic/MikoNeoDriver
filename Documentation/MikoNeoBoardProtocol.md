@@ -17,14 +17,14 @@ The data is sent/received as strings using the following structure:
 
 To start a game some form of handshake is performed between the app and the board, when the game is started from the standard position:
 
-app->board: 14#1*
+app->board: `14#1*`
 <!-- board->app: 14#GO* THIS DOES NOT APPEAR TO HAPPEN ON THE MIKO NEO -->
 
 I did not see this handshake with custom positions (see below).
 
 ## Moving pieces on the board
 
-Data received *from* the board is pretty simple, there's "piece up" and "piece down".
+Data received **from** the board is pretty simple, there's "piece up" and "piece down".
 
 Piece up:
 board->app: `0#<square>u*`
@@ -32,13 +32,29 @@ board->app: `0#<square>u*`
 Piece down:
 board->app: `0#<square>d*`
 
-For example:
-	board->app: `0#e2u*`
-	board->app: `0#e4d*`
-would announce that the piece on square e2 has moved to e4.
-NOTE that no information is given on which piece (King, pawn, etc.) has moved.
+where `<square>` is in standard algebraic notation (from a1 to h8).
 
-Data sent to the board when playing against the app is a little more complicated.
+For example:  
+	board->app: `0#d2u*`  
+	board->app: `0#d4d*`  
+	would announce that the piece on square d2 has moved to d4.
+	**NOTE** that no information is given on which piece (King, pawn, etc.) has moved.
+
+Data sent **to** the board when playing against the app is a little more complicated.
+Rather than "piece up" and "piece down", the start and end coordinates for the move are sent. 
+
+**NOTE** though that the coordinates are given as x,y coordinates, such that square a1 is 0,0 and h8 is 7,7.
+**NOTE ALSO** that some coordinates (only the end ones??) are offset by 0.08 for reasons unknown.
+**NOTE FURTHER** that Knights (and other pieces??) have to make more than one move to get to their destination.
+
+For example:
+	`2,6:2,4.92`
+	would cause the piece on square 2,6 to move to square 2,5 (that is c7 to c6)
+	`6,7:5.5,6.5:5.5,5.5:4.92,4.92`
+	would cause the piece (a knight) on square 6,7 to move to square 5,5 via 5.5,6.5 and 5.5,5.5 (that is g8 to f6 via the corner of g6/h7 and the corner of f6/g7).
+
+The seemingly convoluted move means that the knight avoids hitting a piece on the square in front of it.
+
 
 <!-- 
 
@@ -116,48 +132,52 @@ board->app: 22#3.60*
 -->
 
 ## Example game sequence (taken from Miko iPhone app <-> board interaction)
+**NOTE: a lot of the interaction is not yet listed below. If you need it, open MikoNeoBoardBLETraffic.pcapng in Wireshark**
+
 1.d4 c6 2.Bf4 c5 3.e3 d5 4.Nf3 Nf6 5.Nbd2 Bd7 6.Ne5 c4 7.Be2 Be6 8.c3 Nh5 9.Qa4+ Qd7 10.Nxd7 g6 11.Nf6+ Kd8 12.Qe8# {1-0}
 
-Connection seems to be from pkt 1618 onwards. 
+Connection seems to be from pkt 1618 onwards.
 
-|<->|PKT No.| PGN |Command                      |Purpose   |Notes|
-|---|-------|-----|-----------------------------|----------|-----|
-|-> |1719   |     |14#1*                        |Start game|     |
-|<- |1734   |e4   |d2u                          |Piece up  |     |
-|<- |1735   |e4   |d4d                          |Piece down|     |
-|-> |1736   |c6   |2,6:2,4.92                   |Move piece|     |
-|<- |1743   |Bf4  |c1u                          |Piece up  |     |
-|<- |1745   |Bf4  |f4d                          |Piece down|     |
-|-> |1747   |c5   |2,5:2,3.92                   |Move piece|     |
-|<- |1760   |e3   |e2u                          |Piece up  |     |
-|<- |1762   |e3   |e3d                          |Piece down|     |
-|-> |1764   |d5   |3,6:3,3.92                   |Move piece|     |
-|<- |1771   |Nf3  |g1u                          |Piece up  |     |
-|<- |1773   |Nf3  |f3d                          |Piece down|     |
-|-> |1774   |Nf6  |6,7:5.5,6.5:5.5,5.5:4.92,4.92|Move piece|     |
-|<- |1781   |Nbd2 |b1u                          |Piece up  |     |
-|<- |1782   |Nbd2 |d2d                          |Piece down|     |
-|-> |1784   |Bd7  |2,7:3.08,5.92                |Move piece|     |
-|<- |1791   |Ne5  |f3u                          |Piece up  |     |
-|<- |1793   |Ne5  |e5d                          |Piece down|     |
-|-> |1794   |c4   |2,4:2,2.92                   |Move piece|     |
-|<- |1817   |Be2  |f1u                          |Piece up  |     |
-|<- |1818   |Be2  |e2d                          |Piece down|     |
-|-> |1820   |Be6  |3,6:4.08,4.92                |Move piece|     |
-|<- |1826   |c3   |c2u                          |Piece up  |     |
-|<- |1827   |c3   |c3d                          |Piece down|     |
-|-> |1829   |Nh5  |5,5:6,5:7.08,3.92            |Move piece|     |
-|<- |1854   |Qa4+ |d1u                          |Piece up  |     |
-|<- |1855   |Qa4+ |a4d                          |Piece down|     |
-|-> |1857   |Qd7  |3,7:3,5.92                   |Move piece|     |
-|<- |1863   |Nxd7 |e5u                          |Piece up  |     |
-|<- |1866   |Nxd7 |d7d                          |Piece down|     |
-|-> |1868   |g6   |6,6:6,4.92                   |Move piece|     |
-|<- |1887   |Nf6+ |d7u                          |Piece up  |     |
-|<- |1889   |Nf6+ |f6d                          |Piece down|     |
-|-> |1891   |Kd8  |4,7:2.92,7                   |Move piece|     |
-|<- |1900   |Qe8# |a4u                          |Piece up  |     |
-|<- |1901   |Qe8# |e8d                          |Piece down|     |
+**TODO: Fill in the rest of the packets**
+
+|<->|PKT | PGN |Command                      |Purpose   |Notes|
+|---|----|-----|-----------------------------|----------|-----|
+|-> |1719|     |14#1*                        |Start game|     |
+|<- |1734|e4   |d2u                          |Piece up  |     |
+|<- |1735|e4   |d4d                          |Piece down|     |
+|-> |1736|c6   |2,6:2,4.92                   |Move piece|     |
+|<- |1743|Bf4  |c1u                          |Piece up  |     |
+|<- |1745|Bf4  |f4d                          |Piece down|     |
+|-> |1747|c5   |2,5:2,3.92                   |Move piece|     |
+|<- |1760|e3   |e2u                          |Piece up  |     |
+|<- |1762|e3   |e3d                          |Piece down|     |
+|-> |1764|d5   |3,6:3,3.92                   |Move piece|     |
+|<- |1771|Nf3  |g1u                          |Piece up  |     |
+|<- |1773|Nf3  |f3d                          |Piece down|     |
+|-> |1774|Nf6  |6,7:5.5,6.5:5.5,5.5:4.92,4.92|Move piece|     |
+|<- |1781|Nbd2 |b1u                          |Piece up  |     |
+|<- |1782|Nbd2 |d2d                          |Piece down|     |
+|-> |1784|Bd7  |2,7:3.08,5.92                |Move piece|     |
+|<- |1791|Ne5  |f3u                          |Piece up  |     |
+|<- |1793|Ne5  |e5d                          |Piece down|     |
+|-> |1794|c4   |2,4:2,2.92                   |Move piece|     |
+|<- |1817|Be2  |f1u                          |Piece up  |     |
+|<- |1818|Be2  |e2d                          |Piece down|     |
+|-> |1820|Be6  |3,6:4.08,4.92                |Move piece|     |
+|<- |1826|c3   |c2u                          |Piece up  |     |
+|<- |1827|c3   |c3d                          |Piece down|     |
+|-> |1829|Nh5  |5,5:6,5:7.08,3.92            |Move piece|     |
+|<- |1854|Qa4+ |d1u                          |Piece up  |     |
+|<- |1855|Qa4+ |a4d                          |Piece down|     |
+|-> |1857|Qd7  |3,7:3,5.92                   |Move piece|     |
+|<- |1863|Nxd7 |e5u                          |Piece up  |     |
+|<- |1866|Nxd7 |d7d                          |Piece down|     |
+|-> |1868|g6   |6,6:6,4.92                   |Move piece|     |
+|<- |1887|Nf6+ |d7u                          |Piece up  |     |
+|<- |1889|Nf6+ |f6d                          |Piece down|     |
+|-> |1891|Kd8  |4,7:2.92,7                   |Move piece|     |
+|<- |1900|Qe8# |a4u                          |Piece up  |     |
+|<- |1901|Qe8# |e8d                          |Piece down|     |
 
 
 
