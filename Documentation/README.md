@@ -9,6 +9,7 @@ latest firmware from the Miko iPhone app.)
 https://github.com/mono424/squareoffdriver The inspiration for this driver. Pretty much everything here
 as been taken from his work.
 
+https://github.com/mrquincle/squareoff Some information on the protocol used, which partly matches the findings from the Wireshark capture.
 
 
 ## MikoNeoBoardBLETraffic.pcapng
@@ -29,6 +30,6 @@ it to a chess app or website such as https://chesstempo.com/pgn-viewer/
 ## MikoNeoBoard.txt
 The same as MikoNeoBoard.png, but just the moves in plain text for humans to read.
 
-## Miko Neo Board Communication Protocol
+## MikoNeoBoardProtocol.md
 This is what is known so far about how the Miko app communicates with the Miko Neo board.
 
