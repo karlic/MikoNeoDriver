@@ -1,11 +1,11 @@
 # MikoNeoDriver
 Driver (and test harness) for the Miko Neo chess board heavily based on (i.e., copied from) the work of
-Khalim Fall and Gerhard Kalab.
+Khadim Fall and Gerhard Kalab.
 
 Miko took over the SquareOff Now company and have provided an app and new firmware for the Neo board, so it is
 herein referred to as the Miko Neo.
 
-Khalim Fall's WhitePawn app and Gerhard Kalab's Chess Dojo app already provide a driver for the SquareOff Pro, but
+Khadim Fall's WhitePawn app and Gerhard Kalab's Chess Dojo app already provide a driver for the SquareOff Pro, but
 the Neo is significantly different in that it uses witchcraft (or possibly a magnet under the board) to move the opponent's
 pieces around the board. Neither WhitePawn nor Chess Dojo currently have the correct spells to provide this functionality.
 
