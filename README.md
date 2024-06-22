@@ -20,7 +20,7 @@ functionality not provided by the Miko (and SquareOff Now) apps (such as opening
 ![Video of Sample app working](Documentation/MikoDriverTesting.mov "Video of app working")
 
 ## What doesn't work?
-1. There is currently no withcraft for moving the opponent's pieces
+1. There is currently no witchcraft for moving the opponent's pieces
 
 ## How to capture communication to/from the Neo board
 1. Purchase a bluetooth dongle such as https://www.amazon.co.uk/dp/B07TSJHTSY (£21)
