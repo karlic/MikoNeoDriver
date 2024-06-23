@@ -20,7 +20,7 @@ To start a game some form of handshake is performed between the app and the boar
 app->board: `14#1*`
 <!-- board->app: 14#GO* THIS DOES NOT APPEAR TO HAPPEN ON THE MIKO NEO -->
 
-I did not see this handshake with custom positions (see below).
+<!-- I did not see this handshake with custom positions (see below). -->
 
 ## Moving pieces on the board
 
@@ -132,7 +132,7 @@ board->app: 22#3.60*
 -->
 
 ## Example game sequence (taken from Miko iPhone app <-> board interaction)
-**NOTE: a lot of the interaction is not yet listed below. If you need it, open MikoNeoBoardBLETraffic.pcapng in Wireshark**
+**NOTE: a lot of the interaction is not yet listed below. (Even the commands are not complete.) If you need it, open MikoNeoBoardBLETraffic.pcapng in Wireshark**
 
 1.d4 c6 2.Bf4 c5 3.e3 d5 4.Nf3 Nf6 5.Nbd2 Bd7 6.Ne5 c4 7.Be2 Be6 8.c3 Nh5 9.Qa4+ Qd7 10.Nxd7 g6 11.Nf6+ Kd8 12.Qe8# {1-0}
 
