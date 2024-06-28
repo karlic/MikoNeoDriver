@@ -182,4 +182,8 @@ class Miko {
   Future<void> triggerGameEvent(GameEvent event) {
     return TriggerGameEvent(event).send(_client!);
   }
+
+  Future<void> movePiece(List<String> moveFromTo) {
+    return SetLeds(squares).send(_client!);
+  }
 }

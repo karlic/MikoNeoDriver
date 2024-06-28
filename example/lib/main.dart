@@ -209,11 +209,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text("Test LEDS"),
                   onPressed:
                       !loading && connectedBoard != null ? testLeds : null),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
               TextButton(
                   child: Text("White won"),
                   onPressed: !loading && connectedBoard != null
@@ -226,11 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ? () =>
                           connectedBoard?.triggerGameEvent(GameEvent.blackWins)
                       : null),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
               TextButton(
                   child: Text("King in Check"),
                   onPressed: !loading && connectedBoard != null
@@ -241,6 +231,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text("Draw"),
                   onPressed: !loading && connectedBoard != null
                       ? () => connectedBoard?.triggerGameEvent(GameEvent.draw)
+                      : null),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                  child: Text("Move Piece"),
+                  onPressed: !loading && connectedBoard != null
+                      ? () => connectedBoard?.movePiece(["d2", "d4"])
                       : null),
             ],
           ),
