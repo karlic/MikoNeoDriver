@@ -65,10 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
       Uuid.parse("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
   final bleWriteCharacteristic =
       Uuid.parse("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+  final bleServiceIdPM = Uuid.parse("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
+  final bleReadCharacteristicPM =
+      Uuid.parse("4496994f-2600-4e7e-81d5-e0f7b67ebd48");
+  final bleWriteCharacteristicPM =
+      Uuid.parse("f9664d70-93ff-4cfe-9bfe-b5866aa5bef2");
 
   Miko? connectedBoard;
   StreamSubscription<ConnectionStateUpdate>? boardBtStream;
   StreamSubscription<List<int>>? boardBtInputStream;
+  StreamSubscription<List<int>>? boardBtInputStreamPM;
   bool loading = false;
   bool ackEnabled = true;
 
@@ -100,8 +106,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
         late QualifiedCharacteristic read;
         late QualifiedCharacteristic write;
+        late QualifiedCharacteristic readPM;
+        late QualifiedCharacteristic writePM;
+
         for (var service in services) {
           for (var characteristicId in service.characteristicIds) {
+            if (characteristicId == bleReadCharacteristicPM) {
+              readPM = QualifiedCharacteristic(
+                  serviceId: service.serviceId,
+                  characteristicId: bleReadCharacteristicPM,
+                  deviceId: e.deviceId);
+            }
+
+            if (characteristicId == bleWriteCharacteristicPM) {
+              writePM = QualifiedCharacteristic(
+                  serviceId: service.serviceId,
+                  characteristicId: bleWriteCharacteristicPM,
+                  deviceId: e.deviceId);
+            }
+
             if (characteristicId == bleReadCharacteristic) {
               read = QualifiedCharacteristic(
                   serviceId: service.serviceId,
@@ -128,9 +151,18 @@ class _MyHomePageState extends State<MyHomePage> {
           mikoCommunicationClient.handleReceive(Uint8List.fromList(list));
         });
 
+        MikoCommunicationClient mikoCommunicationClientPM =
+            MikoCommunicationClient(
+          (v) => flutterReactiveBle.writeCharacteristicWithResponse(writePM,
+              value: v),
+        );
+        boardBtInputStreamPM =
+            flutterReactiveBle.subscribeToCharacteristic(readPM).listen((list) {
+          mikoCommunicationClientPM.handleReceive(Uint8List.fromList(list));
+        });
         // connect to board and initialize
         Miko nBoard = Miko();
-        await nBoard.init(mikoCommunicationClient);
+        await nBoard.init(mikoCommunicationClient, mikoCommunicationClientPM);
         print("MikoBoard connected");
 
         // set connected board
@@ -159,9 +191,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void disconnectBle() {
     boardBtInputStream?.cancel();
+    boardBtInputStreamPM?.cancel();
     boardBtStream?.cancel();
     setState(() {
       boardBtInputStream = null;
+      boardBtInputStreamPM = null;
       boardBtStream = null;
       connectedBoard = null;
     });
@@ -240,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                   child: Text("Move Piece"),
                   onPressed: !loading && connectedBoard != null
-                      ? () => connectedBoard?.movePiece(["d2", "d4"])
+                      ? () => connectedBoard?.movePiece(["d7", "d6"])
                       : null),
             ],
           ),

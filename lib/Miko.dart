@@ -6,6 +6,7 @@ import 'package:MikoNeoDriver/protocol/commands/GetBoard.dart';
 import 'package:MikoNeoDriver/protocol/commands/NewGame.dart';
 import 'package:MikoNeoDriver/protocol/commands/RequestBattery.dart';
 import 'package:MikoNeoDriver/protocol/commands/SetLeds.dart';
+import 'package:MikoNeoDriver/protocol/commands/MovePiece.dart';
 import 'package:MikoNeoDriver/protocol/commands/TriggerGameEvent.dart';
 import 'package:MikoNeoDriver/protocol/model/BatteryStatus.dart';
 import 'package:MikoNeoDriver/protocol/model/GameEvent.dart';
@@ -14,10 +15,14 @@ import 'package:MikoNeoDriver/protocol/model/RequestConfig.dart';
 
 class Miko {
   MikoCommunicationClient? _client;
+  MikoCommunicationClient? _clientPM;
 
   StreamController? _inputStreamController;
+  StreamController? _inputStreamControllerPM;
   Stream<MikoMessage>? _inputStream;
+  Stream<MikoMessage>? _inputStreamPM;
   List<int>? _buffer;
+  List<int>? _bufferPM;
   String? _version;
 
   static List<String> squares = [
@@ -91,13 +96,19 @@ class Miko {
 
   Miko();
 
-  Future<void> init(MikoCommunicationClient client,
+  Future<void> init(
+      MikoCommunicationClient client, MikoCommunicationClient clientPM,
       {Duration initialDelay = const Duration(milliseconds: 300)}) async {
     _client = client;
+    _clientPM = clientPM;
 
     _client?.receiveStream?.listen(_handleInputStream);
+    _clientPM?.receiveStream?.listen(_handleInputStreamPM);
     _inputStreamController = new StreamController<MikoMessage>();
+    _inputStreamControllerPM = new StreamController<MikoMessage>();
     _inputStream = _inputStreamController?.stream.asBroadcastStream()
+        as Stream<MikoMessage>?;
+    _inputStreamPM = _inputStreamControllerPM?.stream.asBroadcastStream()
         as Stream<MikoMessage>?;
 
     await Future.delayed(initialDelay);
@@ -135,8 +146,44 @@ class Miko {
     } while (_buffer!.length > 0);
   }
 
+  void _handleInputStreamPM(List<int> chunk) {
+    print("R > " + chunk.map((n) => String.fromCharCode(n & 127)).toString());
+    if (_bufferPM == null) {
+      _bufferPM = chunk.toList();
+    } else {
+      _bufferPM?.addAll(chunk);
+    }
+
+    if (_bufferPM!.length > 1000) {
+      _bufferPM?.removeRange(0, _bufferPM!.length - 1000);
+    }
+
+    do {
+      try {
+        MikoMessage message = MikoMessage.parse(_bufferPM!);
+        _bufferPM?.removeRange(0, message.getLength()! - 1);
+        _inputStreamControllerPM?.add(message);
+        // print("[IMessage] valid (" + message.getCode() + ")");
+      } on MikoInvalidMessageException catch (e) {
+        skipBadBytes(e.skipBytes, _bufferPM!);
+        // print("[IMessage] invalid");
+      } on MikoUncompleteMessage {
+        // wait longer
+        break;
+      } catch (err) {
+        print("Unknown parse-error: " + err.toString());
+        _bufferPM = [];
+        break;
+      }
+    } while (_bufferPM!.length > 0);
+  }
+
   Stream<MikoMessage>? getInputStream() {
     return _inputStream;
+  }
+
+  Stream<MikoMessage>? getInputStreamPM() {
+    return _inputStreamPM;
   }
 
   void skipBadBytes(int start, List<int> buffer) {
@@ -184,6 +231,6 @@ class Miko {
   }
 
   Future<void> movePiece(List<String> moveFromTo) {
-    return SetLeds(squares).send(_client!);
+    return MovePiece(moveFromTo).request(_clientPM!, _inputStreamPM!);
   }
 }
