@@ -1,4 +1,4 @@
-# Miko Neo protocol
+# Miko Neo communication protocol
 
 This is an incomplete, unofficial description of the protocol used between the Miko Neo and the Miko Chess app. Use at your own risk.  
 
@@ -7,89 +7,90 @@ https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.5.1/nrf/include/bluetooth
 
 The advertised device name is "Square Off Neo - xxx", where xxx is that last three characters of the board's bluetooth MAC address.
 
-The services and characteristics offered by the board are as follows:
+The services and characteristics offered by the board. (Those in **bold** are known to be used.)
 
-|Service|Characteristic|Descriptor|UUID                                |Information                       |
-|-------|--------------|----------|------------------------------------|----------------------------------|
-|Service|              |          |6e400001-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 40): Nordic UART Service|
-|       |Characteristic|          |6e400003-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 41): Nordic UART TX (notify)|
-|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 43): Client Characteristic Configuration, Value: bytearray(b'')|
-|       |Characteristic|          |6e400002-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 44): Nordic UART RX (write)|
-|Service|              |          |0000180f-0000-1000-8000-00805f9b34fb|(Handle: 55): Battery Service|
-|       |Characteristic|          |00002a19-0000-1000-8000-00805f9b34fb|(Handle: 56): Battery Level (read,notify), Value: bytearray(b'S')|
-|       |              |Descriptor|00002901-0000-1000-8000-00805f9b34fb|(Handle: 58): Characteristic User Description, Value: bytearray(b'Percentage 0 - 100')|
-|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 59): Client Characteristic Configuration, Value: bytearray(b'')|
-|Service|              |          |0000180a-0000-1000-8000-00805f9b34fb|(Handle: 70): Device Information|
-|       |Characteristic|          |00002a27-0000-1000-8000-00805f9b34fb|(Handle: 71): Hardware Revision String (read), Value: bytearray(b'1A1')|
-|       |Characteristic|          |00002a26-0000-1000-8000-00805f9b34fb|(Handle: 73): Firmware Revision String (read), Value: bytearray(b'3.1.1')|
-|       |Characteristic|          |00002a25-0000-1000-8000-00805f9b34fb|(Handle: 75): Serial Number String (read), Value: bytearray(b'NS-XXXXXX')|
-|Service|              |          |d804b643-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 85): Unknown|
-|       |Characteristic|          |d804b644-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 86): Unknown (read,write), Value: bytearray(b'100111')|
-|       |Characteristic|          |d804b649-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 88): Unknown (read,write), Value: bytearray(b'11')|
-|       |Characteristic|          |d804b645-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 90): Unknown (read,write), Value: bytearray(b'2000,2400')|
-|       |Characteristic|          |d804b646-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 92): Unknown (write)|
-|       |Characteristic|          |d804b651-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 94): Unknown (read,write), Value: bytearray(b'500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5')|
-|       |Characteristic|          |d804b647-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 96): Unknown (write)|
-|       |Characteristic|          |d804b650-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 98): Unknown (read,write), Value: bytearray(b'{"manufacturingconfig":["Neo",1,1,1,1,1,1],"buzzerconfig":[1,0,0,1,1,1],"lightconfig":[1,1],"speedConfigSetting":[500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5],"miscellaneousConfig":[0,0,0,0,0],"batteryConfig":[2000,2400],"boardinformation":["XX:XX:XX:XX:XX:XX",1,"A",1,"v3.3.5-1-g85c43024c","NS-XXXXXX"]}')|
-|Service|              |          |c8659210-af91-4ad3-a995-a58d6fd26145|(Handle: 100): Unknown|
-|       |Characteristic|          |c8659212-af91-4ad3-a995-a58d6fd26145|(Handle: 101): Unknown (read), Value: bytearray(b'\x01\x00\x03\x01\x01')|
-|       |Characteristic|          |d804b648-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 103): Unknown (read,write), Value: bytearray(b'')|
-|       |Characteristic|          |c8659211-af91-4ad3-a995-a58d6fd26145|(Handle: 105): Unknown (write,notify)|
-|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 107): Client Characteristic Configuration, Value: bytearray(b'')|
-|Service|              |          |3d0869ef-e8a4-4088-9459-5454e16820ac|(Handle: 115): Unknown|
-|       |Characteristic|          |4496994f-2600-4e7e-81d5-e0f7b67ebd48|(Handle: 116): Unknown (notify)|
-|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 118): Client Characteristic Configuration, Value: bytearray(b'')|
-|       |Characteristic|          |f9664d70-93ff-4cfe-9bfe-b5866aa5bef2|(Handle: 119): Unknown (write)|
-|       |Characteristic|          |777ac5a4-6fa8-474b-841d-091bd57d28c4|(Handle: 121): Unknown (notify)|
-|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 123): Client Characteristic Configuration, Value: bytearray(b'')|
-|       |Characteristic|          |c7d64c44-42f0-11ec-81d3-0242ac130003|(Handle: 124): Unknown (write)|
-|       |Characteristic|          |c7d64c45-42f0-11ec-81d3-0242ac130003|(Handle: 126): Unknown (read,write), Value: bytearray(b'0:500,10,15,5')|
-|       |Characteristic|          |c7d64c46-42f0-11ec-81d3-0242ac130003|(Handle: 128): Unknown (read,write), Value: bytearray(b'0')|
+|Service|Characteristic|Descriptor|UUID                                    |Information                       |
+|-------|--------------|----------|----------------------------------------|----------------------------------|
+|Service|              |          |6e400001-b5a3-f393-e0a9-e50e24dcca9e    |(Handle: 40): Nordic UART Service|
+|       |Characteristic|          |**6e400003-b5a3-f393-e0a9-e50e24dcca9e**|(Handle: 41): Nordic UART TX (notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb    |(Handle: 43): Client Characteristic Configuration, Value: bytearray(b'')|
+|       |Characteristic|          |**6e400002-b5a3-f393-e0a9-e50e24dcca9e**|(Handle: 44): Nordic UART RX (write)|
+|Service|              |          |0000180f-0000-1000-8000-00805f9b34fb    |(Handle: 55): Battery Service|
+|       |Characteristic|          |00002a19-0000-1000-8000-00805f9b34fb    |(Handle: 56): Battery Level (read,notify), Value: bytearray(b'S')|
+|       |              |Descriptor|00002901-0000-1000-8000-00805f9b34fb    |(Handle: 58): Characteristic User Description, Value: bytearray(b'Percentage 0 - 100')|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb    |(Handle: 59): Client Characteristic Configuration, Value: bytearray(b'')|
+|Service|              |          |0000180a-0000-1000-8000-00805f9b34fb    |(Handle: 70): Device Information|
+|       |Characteristic|          |00002a27-0000-1000-8000-00805f9b34fb    |(Handle: 71): Hardware Revision String (read), Value: bytearray(b'1A1')|
+|       |Characteristic|          |00002a26-0000-1000-8000-00805f9b34fb    |(Handle: 73): Firmware Revision String (read), Value: bytearray(b'3.1.1')|
+|       |Characteristic|          |00002a25-0000-1000-8000-00805f9b34fb    |(Handle: 75): Serial Number String (read), Value: bytearray(b'NS-XXXXXX')|
+|Service|              |          |d804b643-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 85): Unknown|
+|       |Characteristic|          |d804b644-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 86): Unknown (read,write), Value: bytearray(b'100111')|
+|       |Characteristic|          |d804b649-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 88): Unknown (read,write), Value: bytearray(b'11')|
+|       |Characteristic|          |d804b645-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 90): Unknown (read,write), Value: bytearray(b'2000,2400')|
+|       |Characteristic|          |d804b646-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 92): Unknown (write)|
+|       |Characteristic|          |d804b651-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 94): Unknown (read,write), Value: bytearray(b'500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5')|
+|       |Characteristic|          |d804b647-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 96): Unknown (write)|
+|       |Characteristic|          |d804b650-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 98): Unknown (read,write), Value: bytearray(b'{"manufacturingconfig":["Neo",1,1,1,1,1,1],"buzzerconfig":[1,0,0,1,1,1],"lightconfig":[1,1],"speedConfigSetting":[500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5],"miscellaneousConfig":[0,0,0,0,0],"batteryConfig":[2000,2400],"boardinformation":["XX:XX:XX:XX:XX:XX",1,"A",1,"v3.3.5-1-g85c43024c","NS-XXXXXX"]}')|
+|Service|              |          |c8659210-af91-4ad3-a995-a58d6fd26145    |(Handle: 100): Unknown|
+|       |Characteristic|          |c8659212-af91-4ad3-a995-a58d6fd26145    |(Handle: 101): Unknown (read), Value: bytearray(b'\x01\x00\x03\x01\x01')|
+|       |Characteristic|          |d804b648-6ce7-4e81-9f8a-ce0f699085eb    |(Handle: 103): Unknown (read,write), Value: bytearray(b'')|
+|       |Characteristic|          |c8659211-af91-4ad3-a995-a58d6fd26145    |(Handle: 105): Unknown (write,notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb    |(Handle: 107): Client Characteristic Configuration, Value: bytearray(b'')|
+|Service|              |          |3d0869ef-e8a4-4088-9459-5454e16820ac    |(Handle: 115): Unknown|
+|       |Characteristic|          |**4496994f-2600-4e7e-81d5-e0f7b67ebd48**|(Handle: 116): Unknown (notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb    |(Handle: 118): Client Characteristic Configuration, Value: bytearray(b'')|
+|       |Characteristic|          |**f9664d70-93ff-4cfe-9bfe-b5866aa5bef2**|(Handle: 119): Unknown (write)|
+|       |Characteristic|          |**777ac5a4-6fa8-474b-841d-091bd57d28c4**|(Handle: 121): Unknown (notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb    |(Handle: 123): Client Characteristic Configuration, Value: bytearray(b'')|
+|       |Characteristic|          |**c7d64c44-42f0-11ec-81d3-0242ac130003**|(Handle: 124): Unknown (write)|
+|       |Characteristic|          |**c7d64c45-42f0-11ec-81d3-0242ac130003**    |(Handle: 126): Unknown (read,write), Value: bytearray(b'0:500,10,15,5')|
+|       |Characteristic|          |c7d64c46-42f0-11ec-81d3-0242ac130003    |(Handle: 128): Unknown (read,write), Value: bytearray(b'0')|
 
-
-## Communication to and from the board itself
-
-Communication with the board is sent via:
-service   UUID 6e400001-b5a3-f393-e0a9-e50e24dcca9e, using
-attribute UUID 6e400003-b5a3-f393-e0a9-e50e24dcca9e for reading from, and
-attribute UUID 6e400002-b5a3-f393-e0a9-e50e24dcca9e for writing to the board.
-
-UTF-8 strings are sent/received using the following structure:
-
-`<commandId>#<data>*`
-	
-For example sending `14#1*` asks the board to start a new game
+## Characteristic 6e400002-b5a3-f393-e0a9-e50e24dcca9e
+Appears to be used by the Miko app to send high level (UTF8) requests to the board.
+The structure of requests is: `<commandId>#<data>*`.
 
 Known commands
-<->|Command|Purpose             |Output                    |Notes|
----|-------|--------------------|--------------------------|-----|
--> |27#ck* |Notify king in check|Board beeps               |     |
--> |27#wt* |White has won       |White's 2 home ranks flash|     |
--> |27#bl* |Black has won       |Black's 2 home ranks flash|     |
--> |27#dw* |The game is drawn   ||     |
--> |14#1*  |Start new game      ||     |
+<->|Command |Purpose             |Output                    |Notes           |
+---|--------|--------------------|--------------------------|----------------|
+-> |1#*     |                    |                          |                |
+-> |14#1*   |Start new game      |                          |                |
+-> |14#3*   |UNKNOWN             |                          |                |
+-> |30#2000*|UNKNOWN             |                          |                |
+-> |27#ck*  |Notify king in check|Board beeps 3 times      	|**Deprecated??**|
+-> |27#wt*  |White has won       |White's 2 home ranks flash|**Deprecated??**|
+-> |27#bl*  |Black has won       |Black's 2 home ranks flash|**Deprecated??**|
+-> |27#dw*  |The game is drawn   |All 4 home ranks flash    |**Deprecated??**|
 
+## Characteristic c7d64c44-42f0-11ec-81d3-0242ac130003
+It seems that this characteristic has replaced some of the functionality of **6e400002-b5a3-f393-e0a9-e50e24dcca9e**.
 
-## Communication about pieces on the board
-Communication with the board is sent via:
-service   UUID TBA, using
-attribute UUID 4496994f-2600-4e7e-81d5-e0f7b67ebd48 for reading from, and
-attribute UUID f9664d70-93ff-4cfe-9bfe-b5866aa5bef2 for writing to the board.
+Known commands
+<->|Command |Purpose             |Output                    |Notes|
+---|--------|--------------------|--------------------------|-----|
+-> |S:po    |UNKNOWN             |                          |     |
+-> |M:c8    |UNKNOWN             |                          |     |
+-> |R:ISG   |                    |                          |     |
+-> |S:ck    |Notify king in check|Board beeps 3 times      	|     |
+-> |S:wt    |White has won       |White's 2 home ranks flash|     |
+-> |S:bl    |Black has won       |Black's 2 home ranks flash|     |
+-> |S:dw    |The game is drawn   |All 4 home ranks flash    |     |
 
-Once again, UTF-8 strings.
+## Characteristic 6e400003-b5a3-f393-e0a9-e50e24dcca9e
+Appears to be used by the board to send high level (UTF8) responses to the Miko app.
+The structure of reponses is: `<commandId>#<data>*`.
 
-Communication **from** the board is pretty simple, there's "piece up" and "piece down".
+Known commands
+<->|Command             |Purpose                |Output                    |Notes|
+---|--------------------|-----------------------|--------------------------|-----|
+<- |1#XX:XX:XX:XX:XX:XX*|Provides MAC address   |                          |     |
+<- |4#XXXX.XX*          |Provides battery status|                          |     |
 
-This is similar to the Square Off Pro board except that the moves are sent "raw" i.e.,
-without the prefix `0#` or the suffix `*`. (In fact, including them causes errors.)
+## Characteristic 4496994f-2600-4e7e-81d5-e0f7b67ebd48
+Is used by the board to send "piece up" and "piece down" (UTF8) information to the Miko app.
 
-Piece up:
-board->app: `<square>`
-
-Piece down:
-board->app: `<square>`
-
-where `<square>|` is in standard algebraic notation (from a1 to h8).
+The format is pretty simple. Piece up is `<square>u` and piece down is `<square>d`.
+Clearly, `u` signifies up and `d` signifies down. `square` is in standard algebraic notation (a1 to h8).
 
 For example:  
 	board->app: `d2u`  
@@ -97,12 +98,15 @@ For example:
 	would announce that the piece on square d2 has moved to d4.
 	**NOTE** that no information is given on which piece (King, pawn, etc.) has moved.
 
-Data sent **to** the board when playing against the app is a little more complicated.
-(It has to be more complicated since the Neo actually moves the pieces itself.)
+**Note:** that the moves are sent "raw" i.e., without the prefix `0#` or the suffix `*` used by the Square Off Pro.
+(In fact, including them causes errors.)
+
+## Characteristic f9664d70-93ff-4cfe-9bfe-b5866aa5bef2
+Data sent **to** the board when playing against the Miko app are a little more complicated.
+(It has to be more complicated since the Neo actually moves the pieces on the board itself.)
 Rather than "piece up" and "piece down", the start and end coordinates for the move are sent. 
 
 **NOTE** though that the coordinates are given as x,y coordinates followed by `|`, such that square a1 is 0,0 and h8 is 7,7.
-TODO: Check pipe symbol is mandatory
 **NOTE ALSO** that some coordinates (only the end ones??) are offset by 0.08 for reasons unknown.
 **NOTE FURTHER** that Knights (and other pieces??) have to make more than one move to get to their destination.
 
@@ -113,6 +117,14 @@ For example:
 	would cause the piece (a knight) on square 6,7 to move to square 5,5 via 5.5,6.5 and 5.5,5.5 (that is g8 to f6 via the corner of g6/h7 and the corner of f6/g7).
 
 The seemingly convoluted move means that the knight avoids hitting a piece on the square in front of it.
+
+## Characteristic 777ac5a4-6fa8-474b-841d-091bd57d28c4
+Is used by the board to send information about the occupancy of the squares on the board. That is, whether a square has a piece on it or not.
+Each square is either occupied, `1` or unoccupied `0`. There is **no** information about which piece (King, Bishop, pawn, etc. is on the square).
+The occupancy is sent as a UTF8 string of 64 ones and zeroes, denoting a1--a8, b1--b8, ..., h1--h8.
+
+For example, `1100001111000011110000101100001111000011110000111100001111000011` would be occupany of the board at the start of a new game.
+
 
 ## Game start
 
@@ -196,8 +208,8 @@ The Portable Game Notation (PGN) for the example game:
 Connection seems to be from frame 1618 onwards.
 **TODO: Fill in the rest of the frames**
 
-|<->|Attribute|Frame| PGN |Communication                                                   |Purpose     |Notes |
-|---|-------- |-----|-----|----------------------------------------------------------------|------------|------|
+|<->|Charac.  |Frame| PGN |Communication                                                   |Purpose     |Notes |
+|---|---------|-----|-----|----------------------------------------------------------------|------------|------|
 |<- |777ac5a4-|1700 |     |1100001111000011110000101100001111000011110000111100001111000011|Board status|      |
 |-> |6e400002-|1703 |     |1#*                                                             |            |      |
 |<- |6e400003-|1705 |     |1#XX:XX:XX:XX:XX:XX*                                            |            |      |
