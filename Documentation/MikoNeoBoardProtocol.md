@@ -9,42 +9,42 @@ The advertised device name is "Square Off Neo - xxx", where xxx is that last thr
 
 The services and characteristics offered by the board are as follows:
 
-|Service|UUID|Infomation|
-|-------|----|----------|
-|[Service|6e400001-b5a3-f393-e0a9-e50e24dcca9e|(HandleHandle: 40): Nordic UART Service|
-|  [Characteristic|6e400003-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 41): Nordic UART TX (notify)|
-|    [Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 43): Client Characteristic Configuration, Value: bytearray(b'')|
-|  [Characteristic|6e400002-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 44): Nordic UART RX (write)|
-|[Service|0000180f-0000-1000-8000-00805f9b34fb|(Handle: 55): Battery Service|
-|  [Characteristic|00002a19-0000-1000-8000-00805f9b34fb|(Handle: 56): Battery Level (read,notify), Value: bytearray(b'S')|
-|    [Descriptor|00002901-0000-1000-8000-00805f9b34fb|(Handle: 58): Characteristic User Description, Value: bytearray(b'Percentage 0 - 100')|
-|    [Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 59): Client Characteristic Configuration, Value: bytearray(b'')|
-|[Service|0000180a-0000-1000-8000-00805f9b34fb|(Handle: 70): Device Information|
-|  [Characteristic|00002a27-0000-1000-8000-00805f9b34fb|(Handle: 71): Hardware Revision String (read), Value: bytearray(b'1A1')|
-|  [Characteristic|00002a26-0000-1000-8000-00805f9b34fb|(Handle: 73): Firmware Revision String (read), Value: bytearray(b'3.1.1')|
-|  [Characteristic|00002a25-0000-1000-8000-00805f9b34fb|(Handle: 75): Serial Number String (read), Value: bytearray(b'NS-XXXXXX')|
-|[Service|d804b643-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 85): Unknown|
-|  [Characteristic|d804b644-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 86): Unknown (read,write), Value: bytearray(b'100111')|
-|  [Characteristic|d804b649-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 88): Unknown (read,write), Value: bytearray(b'11')|
-|  [Characteristic|d804b645-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 90): Unknown (read,write), Value: bytearray(b'2000,2400')|
-|  [Characteristic|d804b646-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 92): Unknown (write)|
-|  [Characteristic|d804b651-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 94): Unknown (read,write), Value: bytearray(b'500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5')|
-|  [Characteristic|d804b647-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 96): Unknown (write)|
-|  [Characteristic|d804b650-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 98): Unknown (read,write), Value: bytearray(b'{"manufacturingconfig":["Neo",1,1,1,1,1,1],"buzzerconfig":[1,0,0,1,1,1],"lightconfig":[1,1],"speedConfigSetting":[500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5],"miscellaneousConfig":[0,0,0,0,0],"batteryConfig":[2000,2400],"boardinformation":["XX:XX:XX:XX:XX:XX",1,"A",1,"v3.3.5-1-g85c43024c","NS-XXXXXX"]}')|
-|[Service|c8659210-af91-4ad3-a995-a58d6fd26145|(Handle: 100): Unknown|
-|  [Characteristic|c8659212-af91-4ad3-a995-a58d6fd26145|(Handle: 101): Unknown (read), Value: bytearray(b'\x01\x00\x03\x01\x01')|
-|  [Characteristic|d804b648-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 103): Unknown (read,write), Value: bytearray(b'')|
-|  [Characteristic|c8659211-af91-4ad3-a995-a58d6fd26145|(Handle: 105): Unknown (write,notify)|
-|    [Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 107): Client Characteristic Configuration, Value: bytearray(b'')|
-|[Service|3d0869ef-e8a4-4088-9459-5454e16820ac|(Handle: 115): Unknown|
-|  [Characteristic|4496994f-2600-4e7e-81d5-e0f7b67ebd48|(Handle: 116): Unknown (notify)|
-|    [Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 118): Client Characteristic Configuration, Value: bytearray(b'')|
-|  [Characteristic|f9664d70-93ff-4cfe-9bfe-b5866aa5bef2|(Handle: 119): Unknown (write)|
-|  [Characteristic|777ac5a4-6fa8-474b-841d-091bd57d28c4|(Handle: 121): Unknown (notify)|
-|    [Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 123): Client Characteristic Configuration, Value: bytearray(b'')|
-|  [Characteristic|c7d64c44-42f0-11ec-81d3-0242ac130003|(Handle: 124): Unknown (write)|
-|  [Characteristic|c7d64c45-42f0-11ec-81d3-0242ac130003|(Handle: 126): Unknown (read,write), Value: bytearray(b'0:500,10,15,5')|
-|  [Characteristic|c7d64c46-42f0-11ec-81d3-0242ac130003|(Handle: 128): Unknown (read,write), Value: bytearray(b'0')|
+|Service|Characteristic|Descriptor|UUID                                |Information                       |
+|-------|--------------|----------|------------------------------------|----------------------------------|
+|Service|              |          |6e400001-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 40): Nordic UART Service|
+|       |Characteristic|          |6e400003-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 41): Nordic UART TX (notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 43): Client Characteristic Configuration, Value: bytearray(b'')|
+|       |Characteristic|          |6e400002-b5a3-f393-e0a9-e50e24dcca9e|(Handle: 44): Nordic UART RX (write)|
+|Service|              |          |0000180f-0000-1000-8000-00805f9b34fb|(Handle: 55): Battery Service|
+|       |Characteristic|          |00002a19-0000-1000-8000-00805f9b34fb|(Handle: 56): Battery Level (read,notify), Value: bytearray(b'S')|
+|       |              |Descriptor|00002901-0000-1000-8000-00805f9b34fb|(Handle: 58): Characteristic User Description, Value: bytearray(b'Percentage 0 - 100')|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 59): Client Characteristic Configuration, Value: bytearray(b'')|
+|Service|              |          |0000180a-0000-1000-8000-00805f9b34fb|(Handle: 70): Device Information|
+|       |Characteristic|          |00002a27-0000-1000-8000-00805f9b34fb|(Handle: 71): Hardware Revision String (read), Value: bytearray(b'1A1')|
+|       |Characteristic|          |00002a26-0000-1000-8000-00805f9b34fb|(Handle: 73): Firmware Revision String (read), Value: bytearray(b'3.1.1')|
+|       |Characteristic|          |00002a25-0000-1000-8000-00805f9b34fb|(Handle: 75): Serial Number String (read), Value: bytearray(b'NS-XXXXXX')|
+|Service|              |          |d804b643-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 85): Unknown|
+|       |Characteristic|          |d804b644-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 86): Unknown (read,write), Value: bytearray(b'100111')|
+|       |Characteristic|          |d804b649-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 88): Unknown (read,write), Value: bytearray(b'11')|
+|       |Characteristic|          |d804b645-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 90): Unknown (read,write), Value: bytearray(b'2000,2400')|
+|       |Characteristic|          |d804b646-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 92): Unknown (write)|
+|       |Characteristic|          |d804b651-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 94): Unknown (read,write), Value: bytearray(b'500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5')|
+|       |Characteristic|          |d804b647-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 96): Unknown (write)|
+|       |Characteristic|          |d804b650-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 98): Unknown (read,write), Value: bytearray(b'{"manufacturingconfig":["Neo",1,1,1,1,1,1],"buzzerconfig":[1,0,0,1,1,1],"lightconfig":[1,1],"speedConfigSetting":[500,100,5,3,10,20,100,500,30,20,15,10,60,40,25,15,20,15,10,5],"miscellaneousConfig":[0,0,0,0,0],"batteryConfig":[2000,2400],"boardinformation":["XX:XX:XX:XX:XX:XX",1,"A",1,"v3.3.5-1-g85c43024c","NS-XXXXXX"]}')|
+|Service|              |          |c8659210-af91-4ad3-a995-a58d6fd26145|(Handle: 100): Unknown|
+|       |Characteristic|          |c8659212-af91-4ad3-a995-a58d6fd26145|(Handle: 101): Unknown (read), Value: bytearray(b'\x01\x00\x03\x01\x01')|
+|       |Characteristic|          |d804b648-6ce7-4e81-9f8a-ce0f699085eb|(Handle: 103): Unknown (read,write), Value: bytearray(b'')|
+|       |Characteristic|          |c8659211-af91-4ad3-a995-a58d6fd26145|(Handle: 105): Unknown (write,notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 107): Client Characteristic Configuration, Value: bytearray(b'')|
+|Service|              |          |3d0869ef-e8a4-4088-9459-5454e16820ac|(Handle: 115): Unknown|
+|       |Characteristic|          |4496994f-2600-4e7e-81d5-e0f7b67ebd48|(Handle: 116): Unknown (notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 118): Client Characteristic Configuration, Value: bytearray(b'')|
+|       |Characteristic|          |f9664d70-93ff-4cfe-9bfe-b5866aa5bef2|(Handle: 119): Unknown (write)|
+|       |Characteristic|          |777ac5a4-6fa8-474b-841d-091bd57d28c4|(Handle: 121): Unknown (notify)|
+|       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb|(Handle: 123): Client Characteristic Configuration, Value: bytearray(b'')|
+|       |Characteristic|          |c7d64c44-42f0-11ec-81d3-0242ac130003|(Handle: 124): Unknown (write)|
+|       |Characteristic|          |c7d64c45-42f0-11ec-81d3-0242ac130003|(Handle: 126): Unknown (read,write), Value: bytearray(b'0:500,10,15,5')|
+|       |Characteristic|          |c7d64c46-42f0-11ec-81d3-0242ac130003|(Handle: 128): Unknown (read,write), Value: bytearray(b'0')|
 
 
 ## Communication to and from the board itself
