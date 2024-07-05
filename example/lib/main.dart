@@ -65,16 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
       Uuid.parse("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
   final bleWriteCharacteristic =
       Uuid.parse("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
-  final bleServiceIdPM = Uuid.parse("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
+  final bleServiceIdPM = Uuid.parse("3d0869ef-e8a4-4088-9459-5454e16820ac");
   final bleReadCharacteristicPM =
       Uuid.parse("4496994f-2600-4e7e-81d5-e0f7b67ebd48");
   final bleWriteCharacteristicPM =
       Uuid.parse("f9664d70-93ff-4cfe-9bfe-b5866aa5bef2");
+  final bleWriteCharacteristicColonCmds =
+      Uuid.parse("c7d64c44-42f0-11ec-81d3-0242ac130003");
+  final bleReadCharacteristicBoardStatus =
+      Uuid.parse("777ac5a4-6fa8-474b-841d-091bd57d28c4");
 
   Miko? connectedBoard;
   StreamSubscription<ConnectionStateUpdate>? boardBtStream;
   StreamSubscription<List<int>>? boardBtInputStream;
   StreamSubscription<List<int>>? boardBtInputStreamPM;
+  StreamSubscription<List<int>>? boardBtInputStreamColonBS;
   bool loading = false;
   bool ackEnabled = true;
 
@@ -108,9 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
         late QualifiedCharacteristic write;
         late QualifiedCharacteristic readPM;
         late QualifiedCharacteristic writePM;
+        late QualifiedCharacteristic readBoardStatus;
+        late QualifiedCharacteristic writeColonCmds;
 
         for (var service in services) {
           for (var characteristicId in service.characteristicIds) {
+            if (characteristicId == bleReadCharacteristicBoardStatus) {
+              readBoardStatus = QualifiedCharacteristic(
+                  serviceId: service.serviceId,
+                  characteristicId: bleReadCharacteristicBoardStatus,
+                  deviceId: e.deviceId);
+            }
+
+            if (characteristicId == bleWriteCharacteristicColonCmds) {
+              writeColonCmds = QualifiedCharacteristic(
+                  serviceId: service.serviceId,
+                  characteristicId: bleWriteCharacteristicColonCmds,
+                  deviceId: e.deviceId);
+            }
+
             if (characteristicId == bleReadCharacteristicPM) {
               readPM = QualifiedCharacteristic(
                   serviceId: service.serviceId,
@@ -160,9 +181,21 @@ class _MyHomePageState extends State<MyHomePage> {
             flutterReactiveBle.subscribeToCharacteristic(readPM).listen((list) {
           mikoCommunicationClientPM.handleReceive(Uint8List.fromList(list));
         });
+
+        MikoCommunicationClient mikoCommunicationClientColonBS =
+            MikoCommunicationClient(
+          (v) => flutterReactiveBle
+              .writeCharacteristicWithResponse(writeColonCmds, value: v),
+        );
+        boardBtInputStreamColonBS = flutterReactiveBle
+            .subscribeToCharacteristic(readBoardStatus)
+            .listen((list) {
+          mikoCommunicationClientPM.handleReceive(Uint8List.fromList(list));
+        });
         // connect to board and initialize
         Miko nBoard = Miko();
-        await nBoard.init(mikoCommunicationClient, mikoCommunicationClientPM);
+        await nBoard.init(mikoCommunicationClient, mikoCommunicationClientPM,
+            mikoCommunicationClientColonBS);
         print("MikoBoard connected");
 
         // set connected board
@@ -192,10 +225,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void disconnectBle() {
     boardBtInputStream?.cancel();
     boardBtInputStreamPM?.cancel();
+    boardBtInputStreamColonBS?.cancel();
     boardBtStream?.cancel();
     setState(() {
       boardBtInputStream = null;
       boardBtInputStreamPM = null;
+      boardBtInputStreamColonBS = null;
       boardBtStream = null;
       connectedBoard = null;
     });
@@ -252,8 +287,8 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                   child: Text("Black won"),
                   onPressed: !loading && connectedBoard != null
-                      ? () =>
-                          connectedBoard?.triggerGameEvent(GameEvent.blackWins)
+                      ? () => connectedBoard
+                          ?.triggerGameEventColon(GameEvent.blackWins)
                       : null),
               TextButton(
                   child: Text("King in Check"),

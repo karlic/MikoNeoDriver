@@ -9,7 +9,7 @@ abstract class Command<T> {
   Answer<T>? answer;
 
   Future<String> messageBuilder() async {
-    if (body!.contains("|")) {
+    if (body!.contains("|") | body!.contains(":")) {
       return body!;
     }
     return code! + "#" + body! + "*";

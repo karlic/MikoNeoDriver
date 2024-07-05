@@ -42,12 +42,14 @@ The services and characteristics offered by the board. (Those in **bold** are kn
 |       |Characteristic|          |**777ac5a4-6fa8-474b-841d-091bd57d28c4**|(Handle: 121): Unknown (notify)|
 |       |              |Descriptor|00002902-0000-1000-8000-00805f9b34fb    |(Handle: 123): Client Characteristic Configuration, Value: bytearray(b'')|
 |       |Characteristic|          |**c7d64c44-42f0-11ec-81d3-0242ac130003**|(Handle: 124): Unknown (write)|
-|       |Characteristic|          |**c7d64c45-42f0-11ec-81d3-0242ac130003**    |(Handle: 126): Unknown (read,write), Value: bytearray(b'0:500,10,15,5')|
+|       |Characteristic|          |**c7d64c45-42f0-11ec-81d3-0242ac130003**|(Handle: 126): Unknown (read,write), Value: bytearray(b'0:500,10,15,5')|
 |       |Characteristic|          |c7d64c46-42f0-11ec-81d3-0242ac130003    |(Handle: 128): Unknown (read,write), Value: bytearray(b'0')|
 
 ## Characteristic 6e400002-b5a3-f393-e0a9-e50e24dcca9e
 Appears to be used by the Miko app to send high level (UTF8) requests to the board.
 The structure of requests is: `<commandId>#<data>*`.
+
+This is the standard Nordic UART characteristic and the commands are similar to those used by the Square Off Pro. Some of the same commands work on the Neo, but may be deprecated as they appear to have been replaced by new commands using characteristic **c7d64c44-42f0-11ec-81d3-0242ac130003**.
 
 Known commands
 <->|Command |Purpose             |Output                    |Notes           |
@@ -65,15 +67,15 @@ Known commands
 It seems that this characteristic has replaced some of the functionality of **6e400002-b5a3-f393-e0a9-e50e24dcca9e**.
 
 Known commands
-<->|Command |Purpose                     |Output                    |Notes|
----|--------|----------------------------|--------------------------|-----|
--> |S:po    |UNKNOWN                     |                          |     |
--> |M:c8    |UNKNOWN                     |                          |     |
--> |R:ISG   |                            |                          |     |
--> |S:ck    |Notify king in **c**hec**k**|Board beeps 3 times      	|     |
--> |S:wt    |**W**hi**t**e has won       |White's 2 home ranks flash|     |
--> |S:bl    |**Bl**ack has won           |Black's 2 home ranks flash|     |
--> |S:dw    |The game is **d**ra**w**n   |All 4 home ranks flash    |     |
+<->|Command |Purpose             |Output                    |Notes|
+---|--------|--------------------|--------------------------|-----|
+-> |S:po    |UNKNOWN             |                          |     |
+-> |M:c8    |UNKNOWN             |                          |     |
+-> |R:ISG   |                    |                          |     |
+-> |S:ck    |Notify king in check|3 fast beeps              |     |
+-> |S:wt    |White has won       |White's 2 home ranks flash and 5 slow beeps|     |
+-> |S:bl    |Black has won       |Black's 2 home ranks flash|     |
+-> |S:dw    |The game is drawn   |All 4 home ranks flash    |     |
 
 ## Characteristic 6e400003-b5a3-f393-e0a9-e50e24dcca9e
 Appears to be used by the board to send high level (UTF8) responses to the Miko app.

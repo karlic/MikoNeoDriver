@@ -8,6 +8,7 @@ import 'package:MikoNeoDriver/protocol/commands/RequestBattery.dart';
 import 'package:MikoNeoDriver/protocol/commands/SetLeds.dart';
 import 'package:MikoNeoDriver/protocol/commands/MovePiece.dart';
 import 'package:MikoNeoDriver/protocol/commands/TriggerGameEvent.dart';
+import 'package:MikoNeoDriver/protocol/commands/TriggerGameEventColon.dart';
 import 'package:MikoNeoDriver/protocol/model/BatteryStatus.dart';
 import 'package:MikoNeoDriver/protocol/model/GameEvent.dart';
 import 'package:MikoNeoDriver/protocol/model/PieceUpdate.dart';
@@ -16,13 +17,17 @@ import 'package:MikoNeoDriver/protocol/model/RequestConfig.dart';
 class Miko {
   MikoCommunicationClient? _client;
   MikoCommunicationClient? _clientPM;
+  MikoCommunicationClient? _clientColonBS;
 
   StreamController? _inputStreamController;
   StreamController? _inputStreamControllerPM;
+  StreamController? _inputStreamControllerColonBS;
   Stream<MikoMessage>? _inputStream;
   Stream<MikoMessage>? _inputStreamPM;
+  Stream<MikoMessage>? _inputStreamColonBS;
   List<int>? _buffer;
   List<int>? _bufferPM;
+  List<int>? _bufferColonBS;
   String? _version;
 
   static List<String> squares = [
@@ -96,21 +101,25 @@ class Miko {
 
   Miko();
 
-  Future<void> init(
-      MikoCommunicationClient client, MikoCommunicationClient clientPM,
+  Future<void> init(MikoCommunicationClient client,
+      MikoCommunicationClient clientPM, MikoCommunicationClient clientColonBS,
       {Duration initialDelay = const Duration(milliseconds: 300)}) async {
     _client = client;
     _clientPM = clientPM;
+    _clientColonBS = clientColonBS;
 
     _client?.receiveStream?.listen(_handleInputStream);
     _clientPM?.receiveStream?.listen(_handleInputStreamPM);
+    _clientColonBS?.receiveStream?.listen(_handleInputStreamColonBS);
     _inputStreamController = new StreamController<MikoMessage>();
     _inputStreamControllerPM = new StreamController<MikoMessage>();
+    _inputStreamControllerColonBS = new StreamController<MikoMessage>();
     _inputStream = _inputStreamController?.stream.asBroadcastStream()
         as Stream<MikoMessage>?;
     _inputStreamPM = _inputStreamControllerPM?.stream.asBroadcastStream()
         as Stream<MikoMessage>?;
-
+    _inputStreamColonBS = _inputStreamControllerColonBS?.stream
+        .asBroadcastStream() as Stream<MikoMessage>?;
     await Future.delayed(initialDelay);
   }
 
@@ -178,12 +187,48 @@ class Miko {
     } while (_bufferPM!.length > 0);
   }
 
+  void _handleInputStreamColonBS(List<int> chunk) {
+    print("R > " + chunk.map((n) => String.fromCharCode(n & 127)).toString());
+    if (_bufferColonBS == null) {
+      _bufferColonBS = chunk.toList();
+    } else {
+      _bufferColonBS?.addAll(chunk);
+    }
+
+    if (_bufferColonBS!.length > 1000) {
+      _bufferColonBS?.removeRange(0, _bufferColonBS!.length - 1000);
+    }
+
+    do {
+      try {
+        MikoMessage message = MikoMessage.parse(_bufferColonBS!);
+        _bufferColonBS?.removeRange(0, message.getLength()! - 1);
+        _inputStreamControllerColonBS?.add(message);
+        // print("[IMessage] valid (" + message.getCode() + ")");
+      } on MikoInvalidMessageException catch (e) {
+        skipBadBytes(e.skipBytes, _bufferColonBS!);
+        // print("[IMessage] invalid");
+      } on MikoUncompleteMessage {
+        // wait longer
+        break;
+      } catch (err) {
+        print("Unknown parse-error: " + err.toString());
+        _bufferColonBS = [];
+        break;
+      }
+    } while (_bufferColonBS!.length > 0);
+  }
+
   Stream<MikoMessage>? getInputStream() {
     return _inputStream;
   }
 
   Stream<MikoMessage>? getInputStreamPM() {
     return _inputStreamPM;
+  }
+
+  Stream<MikoMessage>? getInputStreamColonBS() {
+    return _inputStreamColonBS;
   }
 
   void skipBadBytes(int start, List<int> buffer) {
@@ -228,6 +273,10 @@ class Miko {
 
   Future<void> triggerGameEvent(GameEvent event) {
     return TriggerGameEvent(event).send(_client!);
+  }
+
+  Future<void> triggerGameEventColon(GameEvent event) {
+    return TriggerGameEventColon(event).send(_clientColonBS!);
   }
 
   Future<void> movePiece(List<String> moveFromTo) {
