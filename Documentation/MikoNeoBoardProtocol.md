@@ -2,7 +2,7 @@
 
 This is an incomplete, unofficial description of the protocol used between the Miko Neo and the Miko Chess app. Use at your own risk.
 
-Communication takes place over Bluetooth Low Energy (BLE) network technology. In addition to the [Nordic UART service UUID and characteristics] (https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.5.1/nrf/include/bluetooth/services/nus.html) used by the Square Off Pro, the Neo uses several other characteristics detailed in the table below.
+Communication takes place over Bluetooth Low Energy (BLE) network technology. In addition to the [Nordic UART service UUID and characteristics](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.5.1/nrf/include/bluetooth/services/nus.html) used by the Square Off Pro, the Neo uses several other characteristics detailed in the table below.
 
 The advertised device name is "Square Off Neo - xxx", where xxx is the last three characters of the board's bluetooth MAC address.
 
