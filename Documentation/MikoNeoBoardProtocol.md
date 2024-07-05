@@ -1,11 +1,11 @@
 # Miko Neo communication protocol
 
-This is an incomplete, unofficial description of the protocol used between the Miko Neo and the Miko Chess app. Use at your own risk.  
+This is an incomplete, unofficial description of the protocol used between the Miko Neo and the Miko Chess app. Use at your own risk.
 
-BLE: uses Nordic UART service UUID and characteristics:  
-https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.5.1/nrf/include/bluetooth/services/nus.html
+Communication takes place over Bluetooth Low Energy (BLE) network technology. In addition to the [Nordic UART service UUID and characteristics] 
+(https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.5.1/nrf/include/bluetooth/services/nus.html) used by the Square Off Pro, the Neo uses several other characteristics detailed in the table below.
 
-The advertised device name is "Square Off Neo - xxx", where xxx is that last three characters of the board's bluetooth MAC address.
+The advertised device name is "Square Off Neo - xxx", where xxx is the last three characters of the board's bluetooth MAC address.
 
 The services and characteristics offered by the board. (Those in **bold** are known to be used.)
 
@@ -66,15 +66,15 @@ Known commands
 It seems that this characteristic has replaced some of the functionality of **6e400002-b5a3-f393-e0a9-e50e24dcca9e**.
 
 Known commands
-<->|Command |Purpose             |Output                    |Notes|
----|--------|--------------------|--------------------------|-----|
--> |S:po    |UNKNOWN             |                          |     |
--> |M:c8    |UNKNOWN             |                          |     |
--> |R:ISG   |                    |                          |     |
--> |S:ck    |Notify king in check|Board beeps 3 times      	|     |
--> |S:wt    |White has won       |White's 2 home ranks flash|     |
--> |S:bl    |Black has won       |Black's 2 home ranks flash|     |
--> |S:dw    |The game is drawn   |All 4 home ranks flash    |     |
+<->|Command |Purpose                     |Output                    |Notes|
+---|--------|----------------------------|--------------------------|-----|
+-> |S:po    |UNKNOWN                     |                          |     |
+-> |M:c8    |UNKNOWN                     |                          |     |
+-> |R:ISG   |                            |                          |     |
+-> |S:ck    |Notify king in **c**hec**k**|Board beeps 3 times      	|     |
+-> |S:wt    |**W**hi**t**e has won       |White's 2 home ranks flash|     |
+-> |S:bl    |**Bl**ack has won           |Black's 2 home ranks flash|     |
+-> |S:dw    |The game is **d**ra**w**n   |All 4 home ranks flash    |     |
 
 ## Characteristic 6e400003-b5a3-f393-e0a9-e50e24dcca9e
 Appears to be used by the board to send high level (UTF8) responses to the Miko app.
@@ -95,8 +95,8 @@ Clearly, `u` signifies up and `d` signifies down. `square` is in standard algebr
 For example:  
 	board->app: `d2u`  
 	board->app: `d4d`  
-	would announce that the piece on square d2 has moved to d4.
-	**NOTE** that no information is given on which piece (King, pawn, etc.) has moved.
+	would announce that the piece on square d2 was lifted and put down on d4.
+	**NOTE** that no information is given on which piece (king, pawn, etc.) has moved.
 
 **Note:** that the moves are sent "raw" i.e., without the prefix `0#` or the suffix `*` used by the Square Off Pro.
 (In fact, including them causes errors.)
@@ -107,7 +107,9 @@ Data sent **to** the board when playing against the Miko app are a little more c
 Rather than "piece up" and "piece down", the start and end coordinates for the move are sent. 
 
 **NOTE** though that the coordinates are given as x,y coordinates followed by `|`, such that square a1 is 0,0 and h8 is 7,7.
+
 **NOTE ALSO** that some coordinates (only the end ones??) are offset by 0.08 for reasons unknown.
+
 **NOTE FURTHER** that Knights (and other pieces??) have to make more than one move to get to their destination.
 
 For example:
@@ -120,10 +122,10 @@ The seemingly convoluted move means that the knight avoids hitting a piece on th
 
 ## Characteristic 777ac5a4-6fa8-474b-841d-091bd57d28c4
 Is used by the board to send information about the occupancy of the squares on the board. That is, whether a square has a piece on it or not.
-Each square is either occupied, `1` or unoccupied `0`. There is **no** information about which piece (King, Bishop, pawn, etc. is on the square).
+Each square is either occupied, `1` or unoccupied `0`. There is **no** information about which piece (king, bishop, pawn, etc. is on the square).
 The occupancy is sent as a UTF8 string of 64 ones and zeroes, denoting a1--a8, b1--b8, ..., h1--h8.
 
-For example, `1100001111000011110000101100001111000011110000111100001111000011` would be occupany of the board at the start of a new game.
+For example, `1100001111000011110000101100001111000011110000111100001111000011` would be the occupany of the board at the start of a new game.
 
 
 ## Game start
@@ -175,12 +177,6 @@ Otherwise the following command can be sent to light up LEDs:
 app->board: 25#<square><square><square...>*
 Example:
 app->board: 25#c8d7e6f5*
-
-### King in check
-
-This command makes a sound on the board when the King is in check.
-
-app->board: 27#ck*
 
 
 
