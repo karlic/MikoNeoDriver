@@ -3,7 +3,9 @@ import 'package:MikoNeoDriver/MikoCommunicationClient.dart';
 import 'package:MikoNeoDriver/MikoMessage.dart';
 import 'package:MikoNeoDriver/protocol/commands/FieldUpdate.dart';
 import 'package:MikoNeoDriver/protocol/commands/GetBoard.dart';
+import 'package:MikoNeoDriver/protocol/commands/RequestMacAddress.dart';
 import 'package:MikoNeoDriver/protocol/commands/NewGame.dart';
+import 'package:MikoNeoDriver/protocol/commands/GetReady.dart';
 import 'package:MikoNeoDriver/protocol/commands/RequestBattery.dart';
 import 'package:MikoNeoDriver/protocol/commands/SetLeds.dart';
 import 'package:MikoNeoDriver/protocol/commands/MovePiece.dart';
@@ -11,6 +13,7 @@ import 'package:MikoNeoDriver/protocol/commands/TriggerGameEvent.dart';
 import 'package:MikoNeoDriver/protocol/commands/TriggerGameEventColon.dart';
 import 'package:MikoNeoDriver/protocol/model/BatteryStatus.dart';
 import 'package:MikoNeoDriver/protocol/model/GameEvent.dart';
+import 'package:MikoNeoDriver/protocol/model/MacAddress.dart';
 import 'package:MikoNeoDriver/protocol/model/PieceUpdate.dart';
 import 'package:MikoNeoDriver/protocol/model/RequestConfig.dart';
 
@@ -255,10 +258,22 @@ class Miko {
     return NewGame().request(_client!, _inputStream!, config);
   }
 
+  Future<bool?> getReady(
+      {RequestConfig config =
+          const RequestConfig(0, const Duration(seconds: 5))}) {
+    return GetReady().request(_client!, _inputStream!, config);
+  }
+
   Future<Map<String, bool>?> getBoard(
       {RequestConfig config =
           const RequestConfig(0, const Duration(seconds: 5))}) {
     return GetBoard().request(_client!, _inputStream!, config);
+  }
+
+  Future<MacAddress?> getMacAddress(
+      {RequestConfig config =
+          const RequestConfig(0, const Duration(seconds: 5))}) {
+    return RequestMacAddress().request(_client!, _inputStream!, config);
   }
 
   Future<BatteryStatus?> getBatteryStatus(
@@ -279,7 +294,7 @@ class Miko {
     return TriggerGameEventColon(event).send(_clientColonBS!);
   }
 
-  Future<void> movePiece(List<String> moveFromTo) {
-    return MovePiece(moveFromTo).request(_clientPM!, _inputStreamPM!);
+  Future<void> movePiece(List<String> moveFromTo, bool isKnight) {
+    return MovePiece(moveFromTo, isKnight).request(_clientPM!, _inputStreamPM!);
   }
 }

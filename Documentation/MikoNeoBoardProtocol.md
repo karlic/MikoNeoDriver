@@ -4,7 +4,7 @@ This is an incomplete, unofficial description of the protocol used between the M
 
 Communication takes place over Bluetooth Low Energy (BLE) network technology. In addition to the [Nordic UART service UUID and characteristics](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.5.1/nrf/include/bluetooth/services/nus.html) used by the Square Off Pro, the Neo uses several other characteristics detailed in the table below.
 
-The advertised device name is "Square Off Neo - xxx", where xxx is the last three characters of the board's bluetooth MAC address.
+The advertised device name is "Square Off Neo - xxx", where xxx seems to be a hex number. Possibly 2 higher than the last three characters of the board's bluetooth MAC address.
 
 The services and characteristics offered by the board. (Those in **bold** are known to be used.)
 
@@ -67,15 +67,15 @@ Known commands
 It seems that this characteristic has replaced some of the functionality of **6e400002-b5a3-f393-e0a9-e50e24dcca9e**.
 
 Known commands
-<->|Command |Purpose             |Output                    |Notes|
----|--------|--------------------|--------------------------|-----|
--> |S:po    |UNKNOWN             |                          |     |
--> |M:c8    |UNKNOWN             |                          |     |
--> |R:ISG   |                    |                          |     |
--> |S:ck    |Notify king in check|3 fast beeps              |     |
+<->|Command |Purpose             |Output                                     |Notes|
+---|--------|--------------------|-------------------------------------------|-----|
+-> |S:po    |UNKNOWN             |                                           |     |
+-> |M:c8    |UNKNOWN             |                                           |     |
+-> |R:ISG   |                    |                                           |     |
+-> |S:ck    |Notify king in check|3 fast beeps                               |     |
 -> |S:wt    |White has won       |White's 2 home ranks flash and 5 slow beeps|     |
--> |S:bl    |Black has won       |Black's 2 home ranks flash|     |
--> |S:dw    |The game is drawn   |All 4 home ranks flash    |     |
+-> |S:bl    |Black has won       |Black's 2 home ranks flash and 5 slow beeps|     |
+-> |S:dw    |The game is drawn   |All 4 home ranks flash and 3 fast beeps    |     |
 
 ## Characteristic 6e400003-b5a3-f393-e0a9-e50e24dcca9e
 Appears to be used by the board to send high level (UTF8) responses to the Miko app.

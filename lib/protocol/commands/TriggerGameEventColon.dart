@@ -19,6 +19,9 @@ class TriggerGameEventColon extends Command<void> {
       case GameEvent.draw:
         body = "S:dw";
         return;
+      case GameEvent.po:
+        body = "S:po";
+        return;
       default:
         throw new ArgumentError("Unknown event: $event");
     }

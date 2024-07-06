@@ -197,7 +197,9 @@ class _MyHomePageState extends State<MyHomePage> {
         await nBoard.init(mikoCommunicationClient, mikoCommunicationClientPM,
             mikoCommunicationClientColonBS);
         print("MikoBoard connected");
-
+        nBoard.getMacAddress();
+        nBoard.triggerGameEventColon(GameEvent.po);
+        //nBoard.getReady();
         // set connected board
         setState(() {
           connectedBoard = nBoard;
@@ -281,8 +283,8 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                   child: Text("White won"),
                   onPressed: !loading && connectedBoard != null
-                      ? () =>
-                          connectedBoard?.triggerGameEvent(GameEvent.whiteWins)
+                      ? () => connectedBoard
+                          ?.triggerGameEventColon(GameEvent.whiteWins)
                       : null),
               TextButton(
                   child: Text("Black won"),
@@ -294,12 +296,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text("King in Check"),
                   onPressed: !loading && connectedBoard != null
                       ? () => connectedBoard
-                          ?.triggerGameEvent(GameEvent.kingInCheck)
+                          ?.triggerGameEventColon(GameEvent.kingInCheck)
                       : null),
               TextButton(
                   child: Text("Draw"),
                   onPressed: !loading && connectedBoard != null
-                      ? () => connectedBoard?.triggerGameEvent(GameEvent.draw)
+                      ? () =>
+                          connectedBoard?.triggerGameEventColon(GameEvent.draw)
                       : null),
             ],
           ),
@@ -309,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                   child: Text("Move Piece"),
                   onPressed: !loading && connectedBoard != null
-                      ? () => connectedBoard?.movePiece(["d7", "d6"])
+                      ? () => connectedBoard?.movePiece(["c7", "c6"], false)
                       : null),
             ],
           ),

@@ -1,3 +1,1 @@
-enum GameEvent {
-  kingInCheck, blackWins, whiteWins, draw
-}
+enum GameEvent { kingInCheck, blackWins, whiteWins, draw, po }
