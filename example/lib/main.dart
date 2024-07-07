@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:example/ble_scanner.dart';
 import 'package:example/device_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -312,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                   child: Text("Move Piece"),
                   onPressed: !loading && connectedBoard != null
-                      ? () => connectedBoard?.movePiece(["c7", "c6"], false)
+                      ? () => connectedBoard?.movePiece(["e5", "f7"], lastData)
                       : null),
             ],
           ),

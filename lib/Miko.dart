@@ -294,7 +294,8 @@ class Miko {
     return TriggerGameEventColon(event).send(_clientColonBS!);
   }
 
-  Future<void> movePiece(List<String> moveFromTo, bool isKnight) {
-    return MovePiece(moveFromTo, isKnight).request(_clientPM!, _inputStreamPM!);
+  Future<void> movePiece(List<String> moveFromTo, Map<String, bool>? lastData) {
+    return MovePiece(moveFromTo, lastData!)
+        .request(_clientPM!, _inputStreamPM!);
   }
 }
